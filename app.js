@@ -109,15 +109,17 @@ app.post("/login/", async (request, response) => {
 });
 
 
-// app.get("/user/tweets/feed/",authenticateToken,async(request,response)=>{
-//     const {username}=request
-//     const r =`select username,tweet,date_time from (user natural join follower) as t natural join tweet  where username="${username}" order by date_time limit 4 offset 0;`;
-//     const e =await db.all(r)
-//     console.log(e)
-//     response.send(e)
+app.get("/user/tweets/feed/",authenticateToken,async(request,response)=>{
+    const {username}=request
+    const i=`select * from user where username ="${username}";`
+const getUserId =await db.get(i)  
+    const r =`select username,tweet,date_time as dateTime  from (user natural join follower) as t natural join tweet  where following_user_id="${getUserId.user_id}" order by tweet_id desc limit 4 offset 0;`;
+    const e =await db.all(r)
+    console.log(e)
+    response.send(e)
     
 
-// })
+})
 
 
 module.exports=app
